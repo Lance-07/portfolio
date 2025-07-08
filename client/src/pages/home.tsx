@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { ModeToggle } from '@/components/mode-toggle';
 import { 
   Code2, 
   Database, 
@@ -109,7 +110,9 @@ export default function Home() {
     <button
       onClick={() => scrollToSection(href)}
       className={`transition-colors duration-200 ${
-        activeSection === href ? 'text-custom-blue-600' : 'text-slate-600 hover:text-custom-blue-600'
+        activeSection === href 
+          ? 'text-custom-blue-600 dark:text-blue-400' 
+          : 'text-slate-600 dark:text-slate-300 hover:text-custom-blue-600 dark:hover:text-blue-400'
       }`}
     >
       {children}
@@ -117,33 +120,37 @@ export default function Home() {
   );
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-slate-900 transition-colors duration-300">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-slate-200 z-50">
+      <nav className="fixed top-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700 z-50 transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="font-bold text-xl text-slate-800">Your Name</div>
+            <div className="font-bold text-xl text-slate-800 dark:text-white">Your Name</div>
             
             {/* Desktop Navigation */}
-            <div className="hidden md:flex space-x-8">
+            <div className="hidden md:flex space-x-8 items-center">
               <NavLink href="home">Home</NavLink>
               <NavLink href="skills">Skills</NavLink>
               <NavLink href="projects">Projects</NavLink>
               <NavLink href="contact">Contact</NavLink>
+              <ModeToggle />
             </div>
             
-            {/* Mobile Menu Button */}
-            <button
-              className="md:hidden p-2"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
+            {/* Mobile Menu Button and Theme Toggle */}
+            <div className="md:hidden flex items-center space-x-2">
+              <ModeToggle />
+              <button
+                className="p-2 text-slate-600 dark:text-slate-300"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
+            </div>
           </div>
           
           {/* Mobile Navigation */}
           {isMenuOpen && (
-            <div className="md:hidden py-4 space-y-4">
+            <div className="md:hidden py-4 space-y-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700">
               <NavLink href="home">Home</NavLink>
               <NavLink href="skills">Skills</NavLink>
               <NavLink href="projects">Projects</NavLink>
@@ -154,18 +161,18 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-custom-blue-50 pt-16">
+      <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-custom-blue-50 dark:from-slate-800 dark:to-slate-900 pt-16 transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in">
           <div className="mb-8">
-            <h1 className="text-4xl md:text-6xl font-bold text-slate-800 mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold text-slate-800 dark:text-white mb-6">
               Your Name
             </h1>
-            <div className="text-xl md:text-2xl text-custom-blue-600 font-semibold mb-8">
+            <div className="text-xl md:text-2xl text-custom-blue-600 dark:text-blue-400 font-semibold mb-8">
               Analytical Developer
             </div>
-            <div className="max-w-4xl mx-auto text-lg md:text-xl text-slate-600 leading-relaxed">
-              I'm an <strong>Analytical Developer</strong>—a professional adept at both{' '}
-              <strong>software development</strong> and <strong>data analysis</strong>. My strength lies in
+            <div className="max-w-4xl mx-auto text-lg md:text-xl text-slate-600 dark:text-slate-300 leading-relaxed">
+              I'm an <strong className="text-slate-800 dark:text-white">Analytical Developer</strong>—a professional adept at both{' '}
+              <strong className="text-slate-800 dark:text-white">software development</strong> and <strong className="text-slate-800 dark:text-white">data analysis</strong>. My strength lies in
               crafting efficient code while simultaneously uncovering critical insights from complex data.
               I'm driven to create impactful, data-informed software, making me a valuable asset in any
               tech-driven environment.
@@ -175,14 +182,14 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
             <Button
               onClick={() => scrollToSection('projects')}
-              className="bg-custom-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-custom-blue-700 transition-colors duration-200 shadow-lg"
+              className="bg-custom-blue-600 dark:bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-custom-blue-700 dark:hover:bg-blue-700 transition-colors duration-200 shadow-lg"
             >
               View My Work
             </Button>
             <Button
               variant="outline"
               onClick={() => scrollToSection('contact')}
-              className="border-2 border-custom-blue-600 text-custom-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-custom-blue-50 transition-colors duration-200"
+              className="border-2 border-custom-blue-600 dark:border-blue-400 text-custom-blue-600 dark:text-blue-400 px-8 py-3 rounded-lg font-semibold hover:bg-custom-blue-50 dark:hover:bg-slate-800 transition-colors duration-200"
             >
               Get In Touch
             </Button>
@@ -191,71 +198,71 @@ export default function Home() {
       </section>
 
       {/* Skills Section */}
-      <section id="skills" className="py-20 bg-white">
+      <section id="skills" className="py-20 bg-white dark:bg-slate-900 transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 fade-in">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Core Skills</h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 dark:text-white mb-4">Core Skills</h2>
+            <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
               A comprehensive toolkit spanning software development and data analysis
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 fade-in">
             {/* JavaScript */}
-            <Card className="bg-slate-50 p-6 rounded-xl hover:shadow-lg transition-shadow duration-200 border-none">
+            <Card className="bg-slate-50 dark:bg-slate-800 p-6 rounded-xl hover:shadow-lg dark:hover:shadow-xl transition-all duration-200 border-none">
               <CardContent className="text-center p-0">
-                <div className="w-16 h-16 bg-yellow-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <SiJavascript className="text-3xl text-yellow-600" />
+                <div className="w-16 h-16 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                  <SiJavascript className="text-3xl text-yellow-600 dark:text-yellow-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-slate-800 mb-2">JavaScript</h3>
-                <p className="text-slate-600">Web development and interactive applications</p>
+                <h3 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">JavaScript</h3>
+                <p className="text-slate-600 dark:text-slate-300">Web development and interactive applications</p>
               </CardContent>
             </Card>
             
             {/* Python */}
-            <Card className="bg-slate-50 p-6 rounded-xl hover:shadow-lg transition-shadow duration-200 border-none">
+            <Card className="bg-slate-50 dark:bg-slate-800 p-6 rounded-xl hover:shadow-lg dark:hover:shadow-xl transition-all duration-200 border-none">
               <CardContent className="text-center p-0">
-                <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <SiPython className="text-3xl text-blue-600" />
+                <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                  <SiPython className="text-3xl text-blue-600 dark:text-blue-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-slate-800 mb-2">Python</h3>
-                <p className="text-slate-600">Data analysis and automation scripts</p>
+                <h3 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Python</h3>
+                <p className="text-slate-600 dark:text-slate-300">Data analysis and automation scripts</p>
               </CardContent>
             </Card>
             
             {/* Shell Scripting */}
-            <Card className="bg-slate-50 p-6 rounded-xl hover:shadow-lg transition-shadow duration-200 border-none">
+            <Card className="bg-slate-50 dark:bg-slate-800 p-6 rounded-xl hover:shadow-lg dark:hover:shadow-xl transition-all duration-200 border-none">
               <CardContent className="text-center p-0">
-                <div className="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <Terminal className="text-3xl text-green-600" />
+                <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                  <Terminal className="text-3xl text-green-600 dark:text-green-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-slate-800 mb-2">Shell Scripting</h3>
-                <p className="text-slate-600">System automation and task optimization</p>
+                <h3 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Shell Scripting</h3>
+                <p className="text-slate-600 dark:text-slate-300">System automation and task optimization</p>
               </CardContent>
             </Card>
             
             {/* Excel */}
-            <Card className="bg-slate-50 p-6 rounded-xl hover:shadow-lg transition-shadow duration-200 border-none">
+            <Card className="bg-slate-50 dark:bg-slate-800 p-6 rounded-xl hover:shadow-lg dark:hover:shadow-xl transition-all duration-200 border-none">
               <CardContent className="text-center p-0">
-                <div className="w-16 h-16 bg-emerald-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <FileSpreadsheet className="text-3xl text-emerald-600" />
+                <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                  <FileSpreadsheet className="text-3xl text-emerald-600 dark:text-emerald-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-slate-800 mb-2">Excel</h3>
-                <p className="text-slate-600">Advanced data manipulation and analysis</p>
+                <h3 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Excel</h3>
+                <p className="text-slate-600 dark:text-slate-300">Advanced data manipulation and analysis</p>
               </CardContent>
             </Card>
           </div>
           
           {/* Currently Learning Section */}
           <div className="mt-16 text-center fade-in">
-            <h3 className="text-2xl font-semibold text-slate-800 mb-8">Currently Upskilling</h3>
-            <Card className="bg-gradient-to-r from-custom-blue-50 to-blue-50 p-8 rounded-xl max-w-2xl mx-auto border-none">
+            <h3 className="text-2xl font-semibold text-slate-800 dark:text-white mb-8">Currently Upskilling</h3>
+            <Card className="bg-gradient-to-r from-custom-blue-50 to-blue-50 dark:from-slate-800 dark:to-slate-700 p-8 rounded-xl max-w-2xl mx-auto border-none">
               <CardContent className="text-center p-0">
-                <div className="w-20 h-20 bg-custom-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-                  <TrendingUp className="text-4xl text-custom-blue-600" />
+                <div className="w-20 h-20 bg-custom-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mb-4 mx-auto">
+                  <TrendingUp className="text-4xl text-custom-blue-600 dark:text-blue-400" />
                 </div>
-                <h4 className="text-xl font-semibold text-slate-800 mb-2">Power Tools</h4>
-                <p className="text-slate-600">
+                <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Power Tools</h4>
+                <p className="text-slate-600 dark:text-slate-300">
                   Actively learning Power BI, Power Query, and other Microsoft Power Platform tools to enhance 
                   data visualization and business intelligence capabilities
                 </p>
@@ -266,45 +273,45 @@ export default function Home() {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-20 bg-slate-50">
+      <section id="projects" className="py-20 bg-slate-50 dark:bg-slate-800 transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 fade-in">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Featured Projects</h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 dark:text-white mb-4">Featured Projects</h2>
+            <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
               A showcase of my work in software development and data analysis
             </p>
           </div>
           
           {/* Software Development Projects */}
           <div className="mb-16 fade-in">
-            <h3 className="text-2xl font-semibold text-slate-800 mb-8 text-center">Software Development Projects</h3>
+            <h3 className="text-2xl font-semibold text-slate-800 dark:text-white mb-8 text-center">Software Development Projects</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {/* Project 1 */}
-              <Card className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200">
+              <Card className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-md hover:shadow-lg dark:hover:shadow-xl transition-all duration-200 border border-slate-200 dark:border-slate-700">
                 <CardContent className="p-0">
-                  <div className="w-full h-48 bg-gradient-to-br from-custom-blue-100 to-blue-200 rounded-lg mb-4 flex items-center justify-center">
-                    <Code2 className="text-4xl text-custom-blue-600" />
+                  <div className="w-full h-48 bg-gradient-to-br from-custom-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-lg mb-4 flex items-center justify-center">
+                    <Code2 className="text-4xl text-custom-blue-600 dark:text-blue-400" />
                   </div>
-                  <h4 className="text-xl font-semibold text-slate-800 mb-2">Project Title 1</h4>
-                  <p className="text-slate-600 mb-4">
+                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Project Title 1</h4>
+                  <p className="text-slate-600 dark:text-slate-300 mb-4">
                     Brief description of your software development project. Include key technologies used and main features implemented.
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="bg-custom-blue-100 text-custom-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                    <span className="bg-custom-blue-100 dark:bg-blue-900/30 text-custom-blue-800 dark:text-blue-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
                       <SiJavascript className="text-xs" />
                       JavaScript
                     </span>
-                    <span className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                    <span className="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
                       <SiReact className="text-xs" />
                       React
                     </span>
                   </div>
                   <div className="flex space-x-4">
-                    <Button variant="ghost" size="sm" className="text-custom-blue-600 hover:text-custom-blue-700 p-0">
+                    <Button variant="ghost" size="sm" className="text-custom-blue-600 dark:text-blue-400 hover:text-custom-blue-700 dark:hover:text-blue-300 p-0">
                       <ExternalLink className="w-4 h-4 mr-1" />
                       Live Demo
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-700 p-0">
+                    <Button variant="ghost" size="sm" className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 p-0">
                       <Github className="w-4 h-4 mr-1" />
                       Code
                     </Button>
@@ -313,31 +320,31 @@ export default function Home() {
               </Card>
               
               {/* Project 2 */}
-              <Card className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200">
+              <Card className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-md hover:shadow-lg dark:hover:shadow-xl transition-all duration-200 border border-slate-200 dark:border-slate-700">
                 <CardContent className="p-0">
-                  <div className="w-full h-48 bg-gradient-to-br from-emerald-100 to-green-200 rounded-lg mb-4 flex items-center justify-center">
-                    <Smartphone className="text-4xl text-emerald-600" />
+                  <div className="w-full h-48 bg-gradient-to-br from-emerald-100 to-green-200 dark:from-emerald-900/30 dark:to-green-800/30 rounded-lg mb-4 flex items-center justify-center">
+                    <Smartphone className="text-4xl text-emerald-600 dark:text-emerald-400" />
                   </div>
-                  <h4 className="text-xl font-semibold text-slate-800 mb-2">Project Title 2</h4>
-                  <p className="text-slate-600 mb-4">
+                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Project Title 2</h4>
+                  <p className="text-slate-600 dark:text-slate-300 mb-4">
                     Brief description of your software development project. Include key technologies used and main features implemented.
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                    <span className="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
                       <SiPython className="text-xs" />
                       Python
                     </span>
-                    <span className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                    <span className="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
                       <SiFlask className="text-xs" />
                       Flask
                     </span>
                   </div>
                   <div className="flex space-x-4">
-                    <Button variant="ghost" size="sm" className="text-custom-blue-600 hover:text-custom-blue-700 p-0">
+                    <Button variant="ghost" size="sm" className="text-custom-blue-600 dark:text-blue-400 hover:text-custom-blue-700 dark:hover:text-blue-300 p-0">
                       <ExternalLink className="w-4 h-4 mr-1" />
                       Live Demo
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-700 p-0">
+                    <Button variant="ghost" size="sm" className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 p-0">
                       <Github className="w-4 h-4 mr-1" />
                       Code
                     </Button>
@@ -346,31 +353,31 @@ export default function Home() {
               </Card>
               
               {/* Project 3 */}
-              <Card className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200">
+              <Card className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-md hover:shadow-lg dark:hover:shadow-xl transition-all duration-200 border border-slate-200 dark:border-slate-700">
                 <CardContent className="p-0">
-                  <div className="w-full h-48 bg-gradient-to-br from-purple-100 to-indigo-200 rounded-lg mb-4 flex items-center justify-center">
-                    <Database className="text-4xl text-purple-600" />
+                  <div className="w-full h-48 bg-gradient-to-br from-purple-100 to-indigo-200 dark:from-purple-900/30 dark:to-indigo-800/30 rounded-lg mb-4 flex items-center justify-center">
+                    <Database className="text-4xl text-purple-600 dark:text-purple-400" />
                   </div>
-                  <h4 className="text-xl font-semibold text-slate-800 mb-2">Project Title 3</h4>
-                  <p className="text-slate-600 mb-4">
+                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Project Title 3</h4>
+                  <p className="text-slate-600 dark:text-slate-300 mb-4">
                     Brief description of your software development project. Include key technologies used and main features implemented.
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                    <span className="bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
                       <SiNodedotjs className="text-xs" />
                       Node.js
                     </span>
-                    <span className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                    <span className="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
                       <SiMongodb className="text-xs" />
                       MongoDB
                     </span>
                   </div>
                   <div className="flex space-x-4">
-                    <Button variant="ghost" size="sm" className="text-custom-blue-600 hover:text-custom-blue-700 p-0">
+                    <Button variant="ghost" size="sm" className="text-custom-blue-600 dark:text-blue-400 hover:text-custom-blue-700 dark:hover:text-blue-300 p-0">
                       <ExternalLink className="w-4 h-4 mr-1" />
                       Live Demo
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-700 p-0">
+                    <Button variant="ghost" size="sm" className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 p-0">
                       <Github className="w-4 h-4 mr-1" />
                       Code
                     </Button>
@@ -382,34 +389,34 @@ export default function Home() {
           
           {/* Data Analysis Projects */}
           <div className="fade-in">
-            <h3 className="text-2xl font-semibold text-slate-800 mb-8 text-center">Data Analysis Projects</h3>
+            <h3 className="text-2xl font-semibold text-slate-800 dark:text-white mb-8 text-center">Data Analysis Projects</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {/* Data Project 1 */}
-              <Card className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200">
+              <Card className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-md hover:shadow-lg dark:hover:shadow-xl transition-all duration-200 border border-slate-200 dark:border-slate-700">
                 <CardContent className="p-0">
-                  <div className="w-full h-48 bg-gradient-to-br from-orange-100 to-red-200 rounded-lg mb-4 flex items-center justify-center">
-                    <BarChart3 className="text-4xl text-orange-600" />
+                  <div className="w-full h-48 bg-gradient-to-br from-orange-100 to-red-200 dark:from-orange-900/30 dark:to-red-800/30 rounded-lg mb-4 flex items-center justify-center">
+                    <BarChart3 className="text-4xl text-orange-600 dark:text-orange-400" />
                   </div>
-                  <h4 className="text-xl font-semibold text-slate-800 mb-2">Data Analysis Project 1</h4>
-                  <p className="text-slate-600 mb-4">
+                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Data Analysis Project 1</h4>
+                  <p className="text-slate-600 dark:text-slate-300 mb-4">
                     Brief description of your data analysis project. Include dataset details, analysis methods, and key insights discovered.
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                    <span className="bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
                       <SiPython className="text-xs" />
                       Python
                     </span>
-                    <span className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                    <span className="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
                       <SiPandas className="text-xs" />
                       Pandas
                     </span>
                   </div>
                   <div className="flex space-x-4">
-                    <Button variant="ghost" size="sm" className="text-custom-blue-600 hover:text-custom-blue-700 p-0">
+                    <Button variant="ghost" size="sm" className="text-custom-blue-600 dark:text-blue-400 hover:text-custom-blue-700 dark:hover:text-blue-300 p-0">
                       <TrendingUp className="w-4 h-4 mr-1" />
                       View Analysis
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-700 p-0">
+                    <Button variant="ghost" size="sm" className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 p-0">
                       <Github className="w-4 h-4 mr-1" />
                       Code
                     </Button>
@@ -418,31 +425,31 @@ export default function Home() {
               </Card>
               
               {/* Data Project 2 */}
-              <Card className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200">
+              <Card className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-md hover:shadow-lg dark:hover:shadow-xl transition-all duration-200 border border-slate-200 dark:border-slate-700">
                 <CardContent className="p-0">
-                  <div className="w-full h-48 bg-gradient-to-br from-teal-100 to-cyan-200 rounded-lg mb-4 flex items-center justify-center">
-                    <PieChart className="text-4xl text-teal-600" />
+                  <div className="w-full h-48 bg-gradient-to-br from-teal-100 to-cyan-200 dark:from-teal-900/30 dark:to-cyan-800/30 rounded-lg mb-4 flex items-center justify-center">
+                    <PieChart className="text-4xl text-teal-600 dark:text-teal-400" />
                   </div>
-                  <h4 className="text-xl font-semibold text-slate-800 mb-2">Data Analysis Project 2</h4>
-                  <p className="text-slate-600 mb-4">
+                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Data Analysis Project 2</h4>
+                  <p className="text-slate-600 dark:text-slate-300 mb-4">
                     Brief description of your data analysis project. Include dataset details, analysis methods, and key insights discovered.
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="bg-teal-100 text-teal-800 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                    <span className="bg-teal-100 dark:bg-teal-900/30 text-teal-800 dark:text-teal-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
                       <FileSpreadsheet className="text-xs" />
                       Excel
                     </span>
-                    <span className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                    <span className="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
                       <BarChart3 className="text-xs" />
                       Power BI
                     </span>
                   </div>
                   <div className="flex space-x-4">
-                    <Button variant="ghost" size="sm" className="text-custom-blue-600 hover:text-custom-blue-700 p-0">
+                    <Button variant="ghost" size="sm" className="text-custom-blue-600 dark:text-blue-400 hover:text-custom-blue-700 dark:hover:text-blue-300 p-0">
                       <TrendingUp className="w-4 h-4 mr-1" />
                       View Analysis
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-700 p-0">
+                    <Button variant="ghost" size="sm" className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 p-0">
                       <FileSpreadsheet className="w-4 h-4 mr-1" />
                       Download
                     </Button>
@@ -451,31 +458,31 @@ export default function Home() {
               </Card>
               
               {/* Data Project 3 */}
-              <Card className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200">
+              <Card className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-md hover:shadow-lg dark:hover:shadow-xl transition-all duration-200 border border-slate-200 dark:border-slate-700">
                 <CardContent className="p-0">
-                  <div className="w-full h-48 bg-gradient-to-br from-pink-100 to-rose-200 rounded-lg mb-4 flex items-center justify-center">
-                    <TrendingDown className="text-4xl text-pink-600" />
+                  <div className="w-full h-48 bg-gradient-to-br from-pink-100 to-rose-200 dark:from-pink-900/30 dark:to-rose-800/30 rounded-lg mb-4 flex items-center justify-center">
+                    <TrendingDown className="text-4xl text-pink-600 dark:text-pink-400" />
                   </div>
-                  <h4 className="text-xl font-semibold text-slate-800 mb-2">Data Analysis Project 3</h4>
-                  <p className="text-slate-600 mb-4">
+                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Data Analysis Project 3</h4>
+                  <p className="text-slate-600 dark:text-slate-300 mb-4">
                     Brief description of your data analysis project. Include dataset details, analysis methods, and key insights discovered.
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                    <span className="bg-pink-100 dark:bg-pink-900/30 text-pink-800 dark:text-pink-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
                       <BarChart3 className="text-xs" />
                       R
                     </span>
-                    <span className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                    <span className="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
                       <PieChart className="text-xs" />
                       Tableau
                     </span>
                   </div>
                   <div className="flex space-x-4">
-                    <Button variant="ghost" size="sm" className="text-custom-blue-600 hover:text-custom-blue-700 p-0">
+                    <Button variant="ghost" size="sm" className="text-custom-blue-600 dark:text-blue-400 hover:text-custom-blue-700 dark:hover:text-blue-300 p-0">
                       <TrendingUp className="w-4 h-4 mr-1" />
                       View Analysis
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-700 p-0">
+                    <Button variant="ghost" size="sm" className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 p-0">
                       <Github className="w-4 h-4 mr-1" />
                       Code
                     </Button>
@@ -488,11 +495,11 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-white">
+      <section id="contact" className="py-20 bg-white dark:bg-slate-900 transition-colors duration-300">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 fade-in">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Get In Touch</h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 dark:text-white mb-4">Get In Touch</h2>
+            <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
               Ready to collaborate on your next project? Let's connect and discuss how I can help bring your ideas to life.
             </p>
           </div>
@@ -500,43 +507,43 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 fade-in">
             {/* Contact Information */}
             <div className="space-y-6">
-              <Card className="flex items-center p-6 bg-slate-50 rounded-xl border-none">
-                <div className="w-12 h-12 bg-custom-blue-100 rounded-lg flex items-center justify-center mr-4">
-                  <Mail className="text-custom-blue-600 text-xl" />
+              <Card className="flex items-center p-6 bg-slate-50 dark:bg-slate-800 rounded-xl border-none transition-colors duration-300">
+                <div className="w-12 h-12 bg-custom-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mr-4">
+                  <Mail className="text-custom-blue-600 dark:text-blue-400 text-xl" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-slate-800">Email</h3>
-                  <p className="text-slate-600">your.email@example.com</p>
+                  <h3 className="text-lg font-semibold text-slate-800 dark:text-white">Email</h3>
+                  <p className="text-slate-600 dark:text-slate-300">your.email@example.com</p>
                 </div>
               </Card>
               
-              <Card className="flex items-center p-6 bg-slate-50 rounded-xl border-none">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                  <Linkedin className="text-blue-600 text-xl" />
+              <Card className="flex items-center p-6 bg-slate-50 dark:bg-slate-800 rounded-xl border-none transition-colors duration-300">
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mr-4">
+                  <Linkedin className="text-blue-600 dark:text-blue-400 text-xl" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-slate-800">LinkedIn</h3>
-                  <p className="text-slate-600">linkedin.com/in/yourprofile</p>
+                  <h3 className="text-lg font-semibold text-slate-800 dark:text-white">LinkedIn</h3>
+                  <p className="text-slate-600 dark:text-slate-300">linkedin.com/in/yourprofile</p>
                 </div>
               </Card>
               
-              <Card className="flex items-center p-6 bg-slate-50 rounded-xl border-none">
-                <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4">
-                  <Github className="text-gray-600 text-xl" />
+              <Card className="flex items-center p-6 bg-slate-50 dark:bg-slate-800 rounded-xl border-none transition-colors duration-300">
+                <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800/30 rounded-lg flex items-center justify-center mr-4">
+                  <Github className="text-gray-600 dark:text-gray-400 text-xl" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-slate-800">GitHub</h3>
-                  <p className="text-slate-600">github.com/yourusername</p>
+                  <h3 className="text-lg font-semibold text-slate-800 dark:text-white">GitHub</h3>
+                  <p className="text-slate-600 dark:text-slate-300">github.com/yourusername</p>
                 </div>
               </Card>
             </div>
             
             {/* Contact Form */}
-            <Card className="bg-slate-50 p-8 rounded-xl border-none">
-              <h3 className="text-xl font-semibold text-slate-800 mb-6">Send a Message</h3>
+            <Card className="bg-slate-50 dark:bg-slate-800 p-8 rounded-xl border-none transition-colors duration-300">
+              <h3 className="text-xl font-semibold text-slate-800 dark:text-white mb-6">Send a Message</h3>
               <form onSubmit={handleFormSubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">Name</label>
+                  <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Name</label>
                   <Input
                     type="text"
                     id="name"
@@ -544,12 +551,12 @@ export default function Home() {
                     value={formData.name}
                     onChange={handleInputChange}
                     placeholder="Your Name"
-                    className="w-full"
+                    className="w-full bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-400"
                     required
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">Email</label>
+                  <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Email</label>
                   <Input
                     type="email"
                     id="email"
@@ -557,12 +564,12 @@ export default function Home() {
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="your.email@example.com"
-                    className="w-full"
+                    className="w-full bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-400"
                     required
                   />
                 </div>
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-slate-700 mb-2">Message</label>
+                  <label htmlFor="message" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Message</label>
                   <Textarea
                     id="message"
                     name="message"
@@ -570,13 +577,13 @@ export default function Home() {
                     onChange={handleInputChange}
                     rows={5}
                     placeholder="Your message here..."
-                    className="w-full"
+                    className="w-full bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-400"
                     required
                   />
                 </div>
                 <Button
                   type="submit"
-                  className="w-full bg-custom-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-custom-blue-700 transition-colors duration-200"
+                  className="w-full bg-custom-blue-600 dark:bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-custom-blue-700 dark:hover:bg-blue-700 transition-colors duration-200"
                 >
                   Send Message
                 </Button>
@@ -587,23 +594,23 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-800 text-white py-12">
+      <footer className="bg-slate-800 dark:bg-slate-950 text-white py-12 transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h3 className="text-2xl font-bold mb-4">Your Name</h3>
-            <p className="text-slate-400 mb-6">Analytical Developer</p>
+            <p className="text-slate-400 dark:text-slate-500 mb-6">Analytical Developer</p>
             <div className="flex justify-center space-x-6 mb-8">
-              <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white transition-colors duration-200 p-2">
+              <Button variant="ghost" size="sm" className="text-slate-400 dark:text-slate-500 hover:text-white dark:hover:text-slate-200 transition-colors duration-200 p-2">
                 <Linkedin className="text-2xl" />
               </Button>
-              <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white transition-colors duration-200 p-2">
+              <Button variant="ghost" size="sm" className="text-slate-400 dark:text-slate-500 hover:text-white dark:hover:text-slate-200 transition-colors duration-200 p-2">
                 <Github className="text-2xl" />
               </Button>
-              <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white transition-colors duration-200 p-2">
+              <Button variant="ghost" size="sm" className="text-slate-400 dark:text-slate-500 hover:text-white dark:hover:text-slate-200 transition-colors duration-200 p-2">
                 <Mail className="text-2xl" />
               </Button>
             </div>
-            <p className="text-slate-400">© 2024 Your Name. All rights reserved.</p>
+            <p className="text-slate-400 dark:text-slate-500">© 2024 Your Name. All rights reserved.</p>
           </div>
         </div>
       </footer>
