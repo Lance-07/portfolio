@@ -1,0 +1,24 @@
+# Project Images Directory
+
+This directory contains images for portfolio project cards.
+
+## Expected Images:
+
+### Software Development Projects:
+- software-project-1.jpg → WEWO: Water Efficiency with Waste Optimization
+- software-project-2.jpg → SaveAStray
+- software-project-3.jpg → BIMS: Business Information Management System
+
+### Data Analysis Projects:
+- data-project-1.jpg → Netflix Case Study
+- data-project-2.jpg → Banana Sales Case Study  
+- data-project-3.jpg → Data Analysis Project 3
+
+## Image Guidelines:
+- Recommended size: 400x300px (4:3 aspect ratio)
+- Format: JPG, PNG, or WebP
+- File size: Under 500KB for optimal loading
+- Images should represent the project or be relevant screenshots
+
+## Fallback Behavior:
+If an image fails to load, the card will display a colored icon instead.

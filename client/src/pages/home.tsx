@@ -22,7 +22,7 @@ import {
   PieChart,
   TrendingDown
 } from 'lucide-react';
-import { SiJavascript, SiPython, SiReact, SiFlask, SiNodedotjs, SiMongodb, SiPandas } from 'react-icons/si';
+import { SiJavascript, SiPython, SiReact, SiFlask, SiNodedotjs, SiMongodb, SiPandas, SiNextdotjs, SiSupabase } from 'react-icons/si';
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState('home');
@@ -125,7 +125,7 @@ export default function Home() {
       <nav className="fixed top-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700 z-50 transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="font-bold text-xl text-slate-800 dark:text-white">Your Name</div>
+            <div className="font-bold text-xl text-slate-800 dark:text-white">Portfolio</div>
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-8 items-center">
@@ -165,7 +165,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in">
           <div className="mb-8">
             <h1 className="text-4xl md:text-6xl font-bold text-slate-800 dark:text-white mb-6">
-              Your Name
+              Hi! I'm Lance
             </h1>
             <div className="text-xl md:text-2xl text-custom-blue-600 dark:text-blue-400 font-semibold mb-8">
               Analytical Developer
@@ -289,29 +289,45 @@ export default function Home() {
               {/* Project 1 */}
               <Card className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-md hover:shadow-lg dark:hover:shadow-xl transition-all duration-200 border border-slate-200 dark:border-slate-700">
                 <CardContent className="p-0">
-                  <div className="w-full h-48 bg-gradient-to-br from-custom-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-lg mb-4 flex items-center justify-center">
-                    <Code2 className="text-4xl text-custom-blue-600 dark:text-blue-400" />
+                  <div className="w-full h-48 bg-gradient-to-br from-custom-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                    <img 
+                      src="/images/projects/software-project-1.jpg" 
+                      alt="WEWO: Water Efficiency with Waste Optimization"
+                      className="w-full h-full object-cover rounded-lg"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
+                        if (nextElement) {
+                          nextElement.style.display = 'flex';
+                        }
+                      }}
+                    />
+                    <Code2 className="text-4xl text-custom-blue-600 dark:text-blue-400 hidden" />
                   </div>
-                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Project Title 1</h4>
+                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">WEWO: Water Efficiency with Waste Optimization</h4>
                   <p className="text-slate-600 dark:text-slate-300 mb-4">
-                    Brief description of your software development project. Include key technologies used and main features implemented.
+                    IoT-powered rainwater purification system designed to tackle water scarcity and plastic waste.
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     <span className="bg-custom-blue-100 dark:bg-blue-900/30 text-custom-blue-800 dark:text-blue-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
                       <SiJavascript className="text-xs" />
                       JavaScript
                     </span>
-                    <span className="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
-                      <SiReact className="text-xs" />
-                      React
+                    <span className="bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                      <SiNextdotjs className="text-xs" />
+                      Next.js
+                    </span>
+                    <span className="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                      <SiSupabase className="text-xs" />
+                      Supabase
                     </span>
                   </div>
                   <div className="flex space-x-4">
-                    <Button variant="ghost" size="sm" className="text-custom-blue-600 dark:text-blue-400 hover:text-custom-blue-700 dark:hover:text-blue-300 p-0">
+                    <Button variant="ghost" size="sm" className="text-custom-blue-600 dark:text-blue-400 hover:text-custom-blue-700 dark:hover:text-blue-300 p-2">
                       <ExternalLink className="w-4 h-4 mr-1" />
                       Live Demo
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 p-0">
+                    <Button variant="ghost" size="sm" className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 p-2">
                       <Github className="w-4 h-4 mr-1" />
                       Code
                     </Button>
@@ -322,47 +338,34 @@ export default function Home() {
               {/* Project 2 */}
               <Card className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-md hover:shadow-lg dark:hover:shadow-xl transition-all duration-200 border border-slate-200 dark:border-slate-700">
                 <CardContent className="p-0">
-                  <div className="w-full h-48 bg-gradient-to-br from-emerald-100 to-green-200 dark:from-emerald-900/30 dark:to-green-800/30 rounded-lg mb-4 flex items-center justify-center">
-                    <Smartphone className="text-4xl text-emerald-600 dark:text-emerald-400" />
+                  <div className="w-full h-48 bg-gradient-to-br from-emerald-100 to-green-200 dark:from-emerald-900/30 dark:to-green-800/30 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                    <img 
+                      src="/images/projects/software-project-2.jpg" 
+                      alt="SaveAStray"
+                      className="w-full h-full object-cover rounded-lg"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
+                        if (nextElement) {
+                          nextElement.style.display = 'flex';
+                        }
+                      }}
+                    />
+                    <Smartphone className="text-4xl text-emerald-600 dark:text-emerald-400 hidden" />
                   </div>
-                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Project Title 2</h4>
+                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">SaveAStray</h4>
                   <p className="text-slate-600 dark:text-slate-300 mb-4">
-                    Brief description of your software development project. Include key technologies used and main features implemented.
+                    Accessible platform for Shelters and Adoptors to find and connect with stray animals.
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     <span className="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
-                      <SiPython className="text-xs" />
-                      Python
+                      <SiJavascript className="text-xs" />
+                      JavaScript
                     </span>
                     <span className="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
-                      <SiFlask className="text-xs" />
-                      Flask
+                      <SiReact className="text-xs" />
+                      React
                     </span>
-                  </div>
-                  <div className="flex space-x-4">
-                    <Button variant="ghost" size="sm" className="text-custom-blue-600 dark:text-blue-400 hover:text-custom-blue-700 dark:hover:text-blue-300 p-0">
-                      <ExternalLink className="w-4 h-4 mr-1" />
-                      Live Demo
-                    </Button>
-                    <Button variant="ghost" size="sm" className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 p-0">
-                      <Github className="w-4 h-4 mr-1" />
-                      Code
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              {/* Project 3 */}
-              <Card className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-md hover:shadow-lg dark:hover:shadow-xl transition-all duration-200 border border-slate-200 dark:border-slate-700">
-                <CardContent className="p-0">
-                  <div className="w-full h-48 bg-gradient-to-br from-purple-100 to-indigo-200 dark:from-purple-900/30 dark:to-indigo-800/30 rounded-lg mb-4 flex items-center justify-center">
-                    <Database className="text-4xl text-purple-600 dark:text-purple-400" />
-                  </div>
-                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Project Title 3</h4>
-                  <p className="text-slate-600 dark:text-slate-300 mb-4">
-                    Brief description of your software development project. Include key technologies used and main features implemented.
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-4">
                     <span className="bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
                       <SiNodedotjs className="text-xs" />
                       Node.js
@@ -377,10 +380,45 @@ export default function Home() {
                       <ExternalLink className="w-4 h-4 mr-1" />
                       Live Demo
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 p-0">
+                    <Button variant="ghost" size="sm" className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 p-2">
                       <Github className="w-4 h-4 mr-1" />
                       Code
                     </Button>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              {/* Project 3 */}
+              <Card className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-md hover:shadow-lg dark:hover:shadow-xl transition-all duration-200 border border-slate-200 dark:border-slate-700">
+                <CardContent className="p-0">
+                  <div className="w-full h-48 bg-gradient-to-br from-purple-100 to-indigo-200 dark:from-purple-900/30 dark:to-indigo-800/30 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                    <img 
+                      src="/images/projects/software-project-3.jpg" 
+                      alt="Project Title 3"
+                      className="w-full h-full object-cover rounded-lg"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
+                        if (nextElement) {
+                          nextElement.style.display = 'flex';
+                        }
+                      }}
+                    />
+                    <Database className="text-4xl text-purple-600 dark:text-purple-400 hidden" />
+                  </div>
+                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">BIMS: Business Information Management System</h4>
+                  <p className="text-slate-600 dark:text-slate-300 mb-4">
+                    A tailored business information management system designed to streamline business operations and enhance data accessibility.
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    <span className="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                      <SiMongodb className="text-xs" />
+                      MongoDB
+                    </span>
+                    <span className="bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                      <SiNextdotjs className="text-xs" />
+                      Next.js
+                    </span>
                   </div>
                 </CardContent>
               </Card>
@@ -394,12 +432,24 @@ export default function Home() {
               {/* Data Project 1 */}
               <Card className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-md hover:shadow-lg dark:hover:shadow-xl transition-all duration-200 border border-slate-200 dark:border-slate-700">
                 <CardContent className="p-0">
-                  <div className="w-full h-48 bg-gradient-to-br from-orange-100 to-red-200 dark:from-orange-900/30 dark:to-red-800/30 rounded-lg mb-4 flex items-center justify-center">
-                    <BarChart3 className="text-4xl text-orange-600 dark:text-orange-400" />
+                  <div className="w-full h-48 bg-gradient-to-br from-orange-100 to-red-200 dark:from-orange-900/30 dark:to-red-800/30 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                    <img 
+                      src="/images/projects/data-project-1.jpg" 
+                      alt="Netflix Case Study"
+                      className="w-full h-full object-cover rounded-lg"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
+                        if (nextElement) {
+                          nextElement.style.display = 'flex';
+                        }
+                      }}
+                    />
+                    <BarChart3 className="text-4xl text-orange-600 dark:text-orange-400 hidden" />
                   </div>
-                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Data Analysis Project 1</h4>
+                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Netflix Case Study</h4>
                   <p className="text-slate-600 dark:text-slate-300 mb-4">
-                    Brief description of your data analysis project. Include dataset details, analysis methods, and key insights discovered.
+                    Explore Netflix movie data and perform exploratory data analysis for a production company to uncover insights about movies from a particular decade.
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     <span className="bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
@@ -427,10 +477,22 @@ export default function Home() {
               {/* Data Project 2 */}
               <Card className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-md hover:shadow-lg dark:hover:shadow-xl transition-all duration-200 border border-slate-200 dark:border-slate-700">
                 <CardContent className="p-0">
-                  <div className="w-full h-48 bg-gradient-to-br from-teal-100 to-cyan-200 dark:from-teal-900/30 dark:to-cyan-800/30 rounded-lg mb-4 flex items-center justify-center">
-                    <PieChart className="text-4xl text-teal-600 dark:text-teal-400" />
+                  <div className="w-full h-48 bg-gradient-to-br from-teal-100 to-cyan-200 dark:from-teal-900/30 dark:to-cyan-800/30 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                    <img 
+                      src="/images/projects/data-project-2.jpg" 
+                      alt="Data Analysis Project 2"
+                      className="w-full h-full object-cover rounded-lg"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
+                        if (nextElement) {
+                          nextElement.style.display = 'flex';
+                        }
+                      }}
+                    />
+                    <PieChart className="text-4xl text-teal-600 dark:text-teal-400 hidden" />
                   </div>
-                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Data Analysis Project 2</h4>
+                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Banana Sales Case Study</h4>
                   <p className="text-slate-600 dark:text-slate-300 mb-4">
                     Brief description of your data analysis project. Include dataset details, analysis methods, and key insights discovered.
                   </p>
@@ -441,7 +503,7 @@ export default function Home() {
                     </span>
                     <span className="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
                       <BarChart3 className="text-xs" />
-                      Power BI
+                      Pivot Tables
                     </span>
                   </div>
                   <div className="flex space-x-4">
@@ -460,8 +522,20 @@ export default function Home() {
               {/* Data Project 3 */}
               <Card className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-md hover:shadow-lg dark:hover:shadow-xl transition-all duration-200 border border-slate-200 dark:border-slate-700">
                 <CardContent className="p-0">
-                  <div className="w-full h-48 bg-gradient-to-br from-pink-100 to-rose-200 dark:from-pink-900/30 dark:to-rose-800/30 rounded-lg mb-4 flex items-center justify-center">
-                    <TrendingDown className="text-4xl text-pink-600 dark:text-pink-400" />
+                  <div className="w-full h-48 bg-gradient-to-br from-pink-100 to-rose-200 dark:from-pink-900/30 dark:to-rose-800/30 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                    <img 
+                      src="/images/projects/data-project-3.jpg" 
+                      alt="Data Analysis Project 3"
+                      className="w-full h-full object-cover rounded-lg"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
+                        if (nextElement) {
+                          nextElement.style.display = 'flex';
+                        }
+                      }}
+                    />
+                    <TrendingDown className="text-4xl text-pink-600 dark:text-pink-400 hidden" />
                   </div>
                   <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Data Analysis Project 3</h4>
                   <p className="text-slate-600 dark:text-slate-300 mb-4">
@@ -513,7 +587,7 @@ export default function Home() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-slate-800 dark:text-white">Email</h3>
-                  <p className="text-slate-600 dark:text-slate-300">your.email@example.com</p>
+                  <p className="text-slate-600 dark:text-slate-300">lanceballesteros.dev@gmail.com</p>
                 </div>
               </Card>
               
@@ -523,7 +597,7 @@ export default function Home() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-slate-800 dark:text-white">LinkedIn</h3>
-                  <p className="text-slate-600 dark:text-slate-300">linkedin.com/in/yourprofile</p>
+                  <p className="text-slate-600 dark:text-slate-300">linkedin.com/in/lance-samuel-ballesteros-942659343/</p>
                 </div>
               </Card>
               
@@ -533,7 +607,7 @@ export default function Home() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-slate-800 dark:text-white">GitHub</h3>
-                  <p className="text-slate-600 dark:text-slate-300">github.com/yourusername</p>
+                  <p className="text-slate-600 dark:text-slate-300">github.com/Lance-07</p>
                 </div>
               </Card>
             </div>
@@ -597,7 +671,7 @@ export default function Home() {
       <footer className="bg-slate-800 dark:bg-slate-950 text-white py-12 transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h3 className="text-2xl font-bold mb-4">Your Name</h3>
+            <h3 className="text-2xl font-bold mb-4">Lance Samuel Ballesteros</h3>
             <p className="text-slate-400 dark:text-slate-500 mb-6">Analytical Developer</p>
             <div className="flex justify-center space-x-6 mb-8">
               <Button variant="ghost" size="sm" className="text-slate-400 dark:text-slate-500 hover:text-white dark:hover:text-slate-200 transition-colors duration-200 p-2">
@@ -610,7 +684,7 @@ export default function Home() {
                 <Mail className="text-2xl" />
               </Button>
             </div>
-            <p className="text-slate-400 dark:text-slate-500">© 2024 Your Name. All rights reserved.</p>
+            <p className="text-slate-400 dark:text-slate-500">© 2025 Lance Samuel Ballesteros. All rights reserved.</p>
           </div>
         </div>
       </footer>
