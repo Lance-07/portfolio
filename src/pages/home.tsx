@@ -21,6 +21,7 @@ import {
   BarChart3,
   PieChart,
   TrendingDown,
+  Download,
 } from "lucide-react";
 import {
   SiJavascript,
@@ -33,6 +34,8 @@ import {
   SiNextdotjs,
   SiSupabase,
 } from "react-icons/si";
+import { toast } from "@/hooks/use-toast";
+import emailjs from "emailjs-com";
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState("home");
@@ -42,6 +45,8 @@ export default function Home() {
     email: "",
     message: "",
   });
+  const [isSending, setIsSending] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
 
   // Smooth scrolling and active section detection
   useEffect(() => {
@@ -101,12 +106,72 @@ export default function Home() {
     setIsMenuOpen(false);
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    const lastSent = localStorage.getItem("contact_last_sent");
+    if (lastSent) {
+      const diff = Date.now() - Number(lastSent);
+      if (diff < 30000) setCooldown(30000 - diff);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (cooldown > 0) {
+      const timer = setInterval(() => {
+        setCooldown((prev) => (prev > 1000 ? prev - 1000 : 0));
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [cooldown]);
+
+  const validateEmail = (email: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement form submission
-    console.log("Form submitted:", formData);
-    alert("Thank you for your message! I will get back to you soon.");
-    setFormData({ name: "", email: "", message: "" });
+
+    // Cooldown check
+    const lastSent = localStorage.getItem("contact_last_sent");
+    if (lastSent && Date.now() - Number(lastSent) < 30000) {
+      toast({ title: "Please wait before sending another message.", variant: "destructive" });
+      return;
+    }
+
+    // Validation
+    if (!formData.name.trim()) {
+      toast({ title: "Name is required", variant: "destructive" });
+      return;
+    }
+    if (!validateEmail(formData.email)) {
+      toast({ title: "Invalid email address", variant: "destructive" });
+      return;
+    }
+    if (!formData.message.trim()) {
+      toast({ title: "Message is required", variant: "destructive" });
+      return;
+    }
+
+    setIsSending(true);
+
+    try {
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+      localStorage.setItem("contact_last_sent", Date.now().toString());
+      setCooldown(30000);
+      toast({ title: "Message sent successfully!", variant: "default" });
+      setFormData({ name: "", email: "", message: "" });
+    } catch (error) {
+      toast({ title: "Failed to send message. Try again later.", variant: "destructive" });
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const handleInputChange = (
@@ -153,7 +218,17 @@ export default function Home() {
               <NavLink href="skills">Skills</NavLink>
               <NavLink href="projects">Projects</NavLink>
               <NavLink href="contact">Contact</NavLink>
-              <ModeToggle />
+              <Button
+                asChild
+                size="sm"
+                className="bg-custom-blue-600 hover:bg-custom-blue-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors duration-200 flex items-center space-x-2 shadow-lg"
+              >
+                <a href="/files/resume.pdf" download>
+                  <Download className="w-5 h-5 mr-2" />
+                  CV
+                </a>
+              </Button>
+              <ModeToggle />               
             </div>
 
             {/* Mobile Menu Button and Theme Toggle */}
@@ -174,11 +249,21 @@ export default function Home() {
 
           {/* Mobile Navigation */}
           {isMenuOpen && (
-            <div className="md:hidden py-4 space-y-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700">
+            <div className="md:hidden py-4 space-y-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 flex flex-col">
               <NavLink href="home">Home</NavLink>
               <NavLink href="skills">Skills</NavLink>
               <NavLink href="projects">Projects</NavLink>
               <NavLink href="contact">Contact</NavLink>
+              <Button
+                asChild
+                size="sm"
+                className="bg-custom-blue-600 hover:bg-custom-blue-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors duration-200 flex items-center space-x-2 shadow-lg self-center w-10/12"
+              >
+                <a href="/files/resume.pdf" download>
+                  <Download className="w-5 h-5 mr-2" />
+                  CV
+                </a>
+              </Button>
             </div>
           )}
         </div>
@@ -400,20 +485,34 @@ export default function Home() {
                   </div>
                   <div className="flex space-x-4">
                     <Button
+                      asChild
                       variant="ghost"
                       size="sm"
                       className="text-custom-blue-600 dark:text-blue-400 hover:text-custom-blue-700 dark:hover:text-blue-300 p-2"
                     >
-                      <ExternalLink className="w-4 h-4 mr-1" />
-                      Live Demo
+                      <a
+                        href="https://wewo-website.vercel.app/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-1" />
+                        Live Demo
+                      </a>
                     </Button>
                     <Button
+                      asChild
                       variant="ghost"
                       size="sm"
                       className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 p-2"
                     >
-                      <Github className="w-4 h-4 mr-1" />
-                      Code
+                      <a
+                        href="https://github.com/Lance-07/wewo-website"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Github className="w-4 h-4 mr-1" />
+                        Code
+                      </a>
                     </Button>
                   </div>
                 </CardContent>
@@ -465,20 +564,34 @@ export default function Home() {
                   </div>
                   <div className="flex space-x-4">
                     <Button
+                      asChild
                       variant="ghost"
                       size="sm"
-                      className="text-custom-blue-600 dark:text-blue-400 hover:text-custom-blue-700 dark:hover:text-blue-300 p-0"
+                      className="text-custom-blue-600 dark:text-blue-400 hover:text-custom-blue-700 dark:hover:text-blue-300 p-2"
                     >
-                      <ExternalLink className="w-4 h-4 mr-1" />
-                      Live Demo
+                      <a
+                        href="https://save-a-stray.vercel.app/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-1" />
+                        Live Demo
+                      </a>
                     </Button>
                     <Button
+                      asChild
                       variant="ghost"
                       size="sm"
                       className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 p-2"
                     >
-                      <Github className="w-4 h-4 mr-1" />
-                      Code
+                      <a
+                        href="https://github.com/RockyBalbonys/SaveAStray"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Github className="w-4 h-4 mr-1" />
+                        Code
+                      </a>
                     </Button>
                   </div>
                 </CardContent>
@@ -531,21 +644,28 @@ export default function Home() {
                     {/* Blurred background with pattern */}
                     <div className="absolute inset-0 bg-gradient-to-br from-custom-blue-100/50 to-purple-100/50 dark:from-blue-900/20 dark:to-purple-900/20"></div>
                     <div className="absolute inset-0 bg-slate-900/10 dark:bg-slate-100/5 backdrop-blur-md"></div>
-                    
+
                     {/* Work in Progress overlay */}
                     <div className="relative z-10 text-center">
                       <div className="w-16 h-16 bg-custom-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mb-3 mx-auto">
                         <Code2 className="text-2xl text-custom-blue-600 dark:text-blue-400" />
                       </div>
                       <div className="bg-white/90 dark:bg-slate-800/90 px-4 py-2 rounded-lg backdrop-blur-sm">
-                        <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">Work in Progress</p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">In Development</p>
+                        <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                          Work in Progress
+                        </p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">
+                          In Development
+                        </p>
                       </div>
                     </div>
                   </div>
-                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Upcoming Project</h4>
+                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">
+                    Upcoming Project
+                  </h4>
                   <p className="text-slate-600 dark:text-slate-300 mb-4">
-                    Exciting new project currently in development. Stay tuned for updates on this innovative solution.
+                    Exciting new project currently in development. Stay tuned
+                    for updates on this innovative solution.
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     <span className="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 px-3 py-1 rounded-full text-sm opacity-70">
@@ -553,11 +673,21 @@ export default function Home() {
                     </span>
                   </div>
                   <div className="flex space-x-4">
-                    <Button variant="ghost" size="sm" className="text-slate-400 dark:text-slate-500 cursor-not-allowed p-0" disabled>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-slate-400 dark:text-slate-500 cursor-not-allowed p-0"
+                      disabled
+                    >
                       <ExternalLink className="w-4 h-4 mr-1" />
                       Preview Soon
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-slate-400 dark:text-slate-500 cursor-not-allowed p-0" disabled>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-slate-400 dark:text-slate-500 cursor-not-allowed p-0"
+                      disabled
+                    >
                       <Github className="w-4 h-4 mr-1" />
                       Code Soon
                     </Button>
@@ -578,7 +708,7 @@ export default function Home() {
                 <CardContent className="p-0">
                   <div className="w-full h-48 bg-gradient-to-br from-orange-100 to-red-200 dark:from-orange-900/30 dark:to-red-800/30 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
                     <img
-                      src="/images/projects/data-project-1.jpg"
+                      src="/images/projects/data-project-1.png"
                       alt="Netflix Case Study"
                       className="w-full h-full object-cover rounded-lg"
                       onError={(e) => {
@@ -612,20 +742,34 @@ export default function Home() {
                   </div>
                   <div className="flex space-x-4">
                     <Button
+                      asChild
                       variant="ghost"
                       size="sm"
-                      className="text-custom-blue-600 dark:text-blue-400 hover:text-custom-blue-700 dark:hover:text-blue-300 p-0"
+                      className="text-custom-blue-600 dark:text-blue-400 hover:text-custom-blue-700 dark:hover:text-blue-300 p-2"
                     >
-                      <TrendingUp className="w-4 h-4 mr-1" />
-                      View Analysis
+                      <a
+                        href="https://www.datacamp.com/datalab/w/b8d2fb4f-0fb3-4050-8bdc-9160fb78e6c9/edit"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <TrendingUp className="w-4 h-4 mr-1" />
+                        View Analysis
+                      </a>
                     </Button>
                     <Button
+                      asChild
                       variant="ghost"
                       size="sm"
-                      className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 p-0"
+                      className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 p-2"
                     >
-                      <Github className="w-4 h-4 mr-1" />
-                      Code
+                      <a
+                        href="https://www.datacamp.com/datalab/w/b8d2fb4f-0fb3-4050-8bdc-9160fb78e6c9/edit"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Github className="w-4 h-4 mr-1" />
+                        Code
+                      </a>
                     </Button>
                   </div>
                 </CardContent>
@@ -636,7 +780,7 @@ export default function Home() {
                 <CardContent className="p-0">
                   <div className="w-full h-48 bg-gradient-to-br from-teal-100 to-cyan-200 dark:from-teal-900/30 dark:to-cyan-800/30 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
                     <img
-                      src="/images/projects/data-project-2.jpg"
+                      src="/images/projects/data-project-2.png"
                       alt="Data Analysis Project 2"
                       className="w-full h-full object-cover rounded-lg"
                       onError={(e) => {
@@ -654,9 +798,10 @@ export default function Home() {
                     Banana Sales Case Study
                   </h4>
                   <p className="text-slate-600 dark:text-slate-300 mb-4">
-                    Brief description of your data analysis project. Include
-                    dataset details, analysis methods, and key insights
-                    discovered.
+                    Examines banana sales to identify trends, forecast future
+                    sales, and model the impact of upsell strategies, pricing
+                    changes, and market scenarios using key metrics like growth
+                    rate and elasticity of demand.
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     <span className="bg-teal-100 dark:bg-teal-900/30 text-teal-800 dark:text-teal-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
@@ -670,20 +815,30 @@ export default function Home() {
                   </div>
                   <div className="flex space-x-4">
                     <Button
+                      asChild
                       variant="ghost"
                       size="sm"
-                      className="text-custom-blue-600 dark:text-blue-400 hover:text-custom-blue-700 dark:hover:text-blue-300 p-0"
+                      className="text-custom-blue-600 dark:text-blue-400 hover:text-custom-blue-700 dark:hover:text-blue-300 p-2"
                     >
-                      <TrendingUp className="w-4 h-4 mr-1" />
-                      View Analysis
+                      <a
+                        href="https://docs.google.com/spreadsheets/d/1M5v0MeiwlEVH2HYKd7bO0MAOl_Pt5cJY/edit?usp=sharing&ouid=106522059067910992548&rtpof=true&sd=true"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <TrendingUp className="w-4 h-4 mr-1" />
+                        View Analysis
+                      </a>
                     </Button>
                     <Button
+                      asChild
                       variant="ghost"
                       size="sm"
-                      className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 p-0"
+                      className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 p-2"
                     >
-                      <FileSpreadsheet className="w-4 h-4 mr-1" />
-                      Download
+                      <a href="/files/banana-sales.xlsx" download>
+                        <FileSpreadsheet className="w-4 h-4 mr-1" />
+                        Download
+                      </a>
                     </Button>
                   </div>
                 </CardContent>
@@ -694,7 +849,7 @@ export default function Home() {
                 <CardContent className="p-0">
                   <div className="w-full h-48 bg-gradient-to-br from-pink-100 to-rose-200 dark:from-pink-900/30 dark:to-rose-800/30 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
                     <img
-                      src="/images/projects/data-project-3.jpg"
+                      src="/images/projects/data-project-3.png"
                       alt="Data Analysis Project 3"
                       className="w-full h-full object-cover rounded-lg"
                       onError={(e) => {
@@ -709,38 +864,47 @@ export default function Home() {
                     <TrendingDown className="text-4xl text-pink-600 dark:text-pink-400 hidden" />
                   </div>
                   <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">
-                    Data Analysis Project 3
+                    Esports Analysis
                   </h4>
                   <p className="text-slate-600 dark:text-slate-300 mb-4">
-                    Brief description of your data analysis project. Include
-                    dataset details, analysis methods, and key insights
-                    discovered.
+                    An analysis of esports tournament data reveals the highest and lowest earning trends across various content types, countries, teams, players, and game genres.
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="bg-pink-100 dark:bg-pink-900/30 text-pink-800 dark:text-pink-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
-                      <BarChart3 className="text-xs" />R
+                    <span className="bg-teal-100 dark:bg-teal-900/30 text-teal-800 dark:text-teal-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                      <FileSpreadsheet className="text-xs" />
+                      Excel
                     </span>
                     <span className="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
-                      <PieChart className="text-xs" />
-                      Tableau
+                      <BarChart3 className="text-xs" />
+                      Pivot Tables
                     </span>
                   </div>
                   <div className="flex space-x-4">
                     <Button
+                      asChild
                       variant="ghost"
                       size="sm"
-                      className="text-custom-blue-600 dark:text-blue-400 hover:text-custom-blue-700 dark:hover:text-blue-300 p-0"
+                      className="text-custom-blue-600 dark:text-blue-400 hover:text-custom-blue-700 dark:hover:text-blue-300 p-2"
                     >
-                      <TrendingUp className="w-4 h-4 mr-1" />
-                      View Analysis
+                      <a
+                        href="https://docs.google.com/spreadsheets/d/1vmtAFfMGcx6oD6ZZD-QS73-JJL4qpakH/edit?usp=sharing&ouid=106522059067910992548&rtpof=true&sd=true"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <TrendingUp className="w-4 h-4 mr-1" />
+                        View Analysis
+                      </a>
                     </Button>
                     <Button
+                      asChild
                       variant="ghost"
                       size="sm"
-                      className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 p-0"
+                      className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 p-2"
                     >
-                      <Github className="w-4 h-4 mr-1" />
-                      Code
+                      <a href="/files/esports.xlsx" download>
+                        <FileSpreadsheet className="w-4 h-4 mr-1" />
+                        Download
+                      </a>
                     </Button>
                   </div>
                 </CardContent>
@@ -753,21 +917,28 @@ export default function Home() {
                     {/* Blurred background with pattern */}
                     <div className="absolute inset-0 bg-gradient-to-br from-orange-100/50 to-pink-100/50 dark:from-orange-900/20 dark:to-pink-900/20"></div>
                     <div className="absolute inset-0 bg-slate-900/10 dark:bg-slate-100/5 backdrop-blur-md"></div>
-                    
+
                     {/* Work in Progress overlay */}
                     <div className="relative z-10 text-center">
                       <div className="w-16 h-16 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center mb-3 mx-auto">
                         <BarChart3 className="text-2xl text-orange-600 dark:text-orange-400" />
                       </div>
                       <div className="bg-white/90 dark:bg-slate-800/90 px-4 py-2 rounded-lg backdrop-blur-sm">
-                        <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">Work in Progress</p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">Analysis in Development</p>
+                        <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                          Work in Progress
+                        </p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">
+                          Analysis in Development
+                        </p>
                       </div>
                     </div>
                   </div>
-                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">Upcoming Analysis</h4>
+                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">
+                    Upcoming Analysis
+                  </h4>
                   <p className="text-slate-600 dark:text-slate-300 mb-4">
-                    New data analysis project currently being developed. Advanced analytics and insights coming soon.
+                    New data analysis project currently being developed.
+                    Advanced analytics and insights coming soon.
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     <span className="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 px-3 py-1 rounded-full text-sm opacity-70">
@@ -775,11 +946,21 @@ export default function Home() {
                     </span>
                   </div>
                   <div className="flex space-x-4">
-                    <Button variant="ghost" size="sm" className="text-slate-400 dark:text-slate-500 cursor-not-allowed p-0" disabled>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-slate-400 dark:text-slate-500 cursor-not-allowed p-0"
+                      disabled
+                    >
                       <TrendingUp className="w-4 h-4 mr-1" />
                       Analysis Soon
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-slate-400 dark:text-slate-500 cursor-not-allowed p-0" disabled>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-slate-400 dark:text-slate-500 cursor-not-allowed p-0"
+                      disabled
+                    >
                       <Github className="w-4 h-4 mr-1" />
                       Code Soon
                     </Button>
@@ -937,25 +1118,40 @@ export default function Home() {
             </p>
             <div className="flex justify-center space-x-6 mb-8">
               <Button
+                asChild
                 variant="ghost"
                 size="sm"
                 className="text-slate-400 dark:text-slate-500 hover:text-white dark:hover:text-slate-200 transition-colors duration-200 p-2"
               >
-                <Linkedin className="text-2xl" />
+                <a href="https://www.linkedin.com/in/lance-samuel-ballesteros-942659343/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Linkedin className="text-2xl" />
+                </a>
               </Button>
               <Button
+                asChild
                 variant="ghost"
                 size="sm"
                 className="text-slate-400 dark:text-slate-500 hover:text-white dark:hover:text-slate-200 transition-colors duration-200 p-2"
               >
-                <Github className="text-2xl" />
+                <a href="https://github.com/Lance-07"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Github className="text-2xl" />
+                </a>
               </Button>
               <Button
+                asChild
                 variant="ghost"
                 size="sm"
                 className="text-slate-400 dark:text-slate-500 hover:text-white dark:hover:text-slate-200 transition-colors duration-200 p-2"
               >
-                <Mail className="text-2xl" />
+                <a href="mailto: lanceballesteros.dev@gmail.com">
+                  <Mail className="text-2xl" />
+                </a>
               </Button>
             </div>
             <p className="text-slate-400 dark:text-slate-500">
