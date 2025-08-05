@@ -99,6 +99,7 @@ This is a full-stack personal portfolio website built with React, Express.js, an
 - July 08, 2025. Initial setup
 - July 08, 2025. Added comprehensive dark mode support with theme provider, toggle component, and dark variants for all UI elements  
 - July 08, 2025. Added public folder structure for project images with fallback icon system
+- July 08, 2025. Added work-in-progress project cards with blur effects and overlay text to show ongoing development
 
 ## User Preferences
 
